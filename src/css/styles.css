@@ -6,6 +6,8 @@
 */
 @import url('./reset.css');
 @import url('./gallery.css');
+@import url('./loader.css');
+@import url('./submit.css');
 
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -23,6 +25,3 @@
   -webkit-text-size-adjust: 100%;
 }
 
-li{
-  margin:10px;
-}
