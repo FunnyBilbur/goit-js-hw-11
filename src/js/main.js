@@ -41,6 +41,7 @@ function getRandomImages() {
                     backgroundColor: '#EF4040',
                     progressBarColor: '#B51B1B'
                 });
+                load.classList.remove('loader');
                 return;
             }
             if (images.total + 19 < randomPage * 20) {
