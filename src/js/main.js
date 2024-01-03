@@ -9,11 +9,11 @@ const load = document.querySelector(".load");
 form.addEventListener('submit', (arg) => {
     arg.preventDefault();
     gallery.innerHTML = "";
-    load.classList.add('loader');
     getRandomImages();
 });
 
 function getRandomImages() {
+    load.classList.add('loader');
     let randomPage = Math.floor(Math.random() * 10) + 1;
     let searchParams = new URLSearchParams({
         key: "41527522-465889db431a6a06c19f4d10b",
@@ -30,14 +30,9 @@ function getRandomImages() {
             }
             return response.json();
         })
-        .then((users) => {
-            if (users.total + 19 < randomPage * 20) {
-                console.log(`User Total ${users.total} less than RandomPage ${randomPage} and needed count ${randomPage * 20}`);
-                handleEmptyPageResult();
-            }
-            load.classList.remove('loader');
-            if (users.total === 0) {
-                console.log(users);
+        .then((images) => {
+            if (images.total === 0) {
+                console.log(images);
                 iziToast.show({
                     titleColor: 'white',
                     position: 'topRight',
@@ -48,7 +43,13 @@ function getRandomImages() {
                 });
                 return;
             }
-            const markup = users.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
+            if (images.total + 19 < randomPage * 20) {
+                console.log(`Total image: ${images.total} less than RandomPage ${randomPage} and needed count of images ${randomPage * 20}`);
+                handleEmptyPageResult();
+                return;
+            }
+            load.classList.remove('loader');
+            const markup = images.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
                 return `<li class="gallery__item">
                     <a class="gallery__link" href="${largeImageURL}">
                         <img
@@ -81,7 +82,7 @@ function getRandomImages() {
             gallery.insertAdjacentHTML("beforeend", markup);
             var lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: '250' /* options */ });
             lightbox.refresh();
-            console.log(users);
+            console.log(images);
         })
         .catch((error) => console.log(error));
 }
